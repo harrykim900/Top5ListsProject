@@ -40,6 +40,7 @@ registerUser = async (req, res) => {
         }
         const existingUser = await User.findOne({ email: email });
         if (existingUser) {
+            console.log("Exists");
             return res
                 .status(400)
                 .json({

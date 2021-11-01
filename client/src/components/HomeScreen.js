@@ -41,11 +41,12 @@ const HomeScreen = () => {
                 color="primary" 
                 aria-label="add"
                 id="add-list-button"
+                size="small"
                 onClick={handleCreateNewList}
             >
                 <AddIcon />
             </Fab>
-                <Typography variant="h2">Your Lists</Typography>
+                <Typography variant="h2" fontSize="36pt">Your Lists</Typography>
             </div>
             <div id="list-selector-list">
                 {
