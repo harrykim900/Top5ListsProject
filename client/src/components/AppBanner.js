@@ -79,6 +79,7 @@ export default function AppBanner() {
 
     let editToolbar = "";
     let menu = loggedOutMenu;
+    console.log(window.location.href);
     if (auth.loggedIn) {
         menu = loggedInMenu;
         if (store.currentList) {
@@ -87,7 +88,7 @@ export default function AppBanner() {
     }
     
     function getAccountMenu(loggedIn) {
-        if (auth.loggedIn){
+        if (loggedIn){
             return auth.user.firstName[0] + auth.user.lastName[0];
         }
         return <AccountCircle />;
