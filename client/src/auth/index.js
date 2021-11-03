@@ -9,13 +9,18 @@ console.log("create AuthContext: " + AuthContext);
 export const AuthActionType = {
     GET_LOGGED_IN: "GET_LOGGED_IN",
     REGISTER_USER: "REGISTER_USER",
-    LOGIN_USER: "LOGIN_USER"
+    LOGIN_USER: "LOGIN_USER",
+    LOGOUT_USER: "LOGOUT_USER",
+    ERROR_MESSAGE: "ERROR_MESSAGE",
+    CLOSE_ACCOUNT_ERROR_MODAL: "CLOSE_ACCOUNT_ERROR_MODAL",
 }
 
 function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
         user: null,
-        loggedIn: false
+        loggedIn: false,
+        errorOccurred: false,
+        errMsg: "",
     });
     const history = useHistory();
 
@@ -44,6 +49,24 @@ function AuthContextProvider(props) {
                     loggedIn: true
                 })
             }
+            case AuthActionType.LOGOUT_USER: {
+                return setAuth({
+                    user: null,
+                    loggedIn: false
+                })
+            }
+            case AuthActionType.ERROR_MESSAGE: {
+                return setAuth({
+                    errorOccurred: true,
+                    errMsg: payload.errMsg
+                })
+            }
+            case AuthActionType.CLOSE_ACCOUNT_ERROR_MODAL: {
+                return setAuth({
+                    errorOccurred: false,
+                    errMsg: payload.errMsg
+                })
+            }
             default:
                 return auth;
         }
@@ -62,11 +85,61 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.registerUser = async function(userData, store) {
-        const response = await api.registerUser(userData);      
+    auth.registerUser = async function (userData, store) {
+        try {
+            const response = await api.registerUser(userData);
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.REGISTER_USER,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                history.push("/");
+                store.loadIdNamePairs();
+            }
+        }
+        catch (err) {
+            authReducer({
+                type: AuthActionType.ERROR_MESSAGE,
+                payload: {
+                    errMsg: err.response.data.errorMessage
+                }
+            })
+            console.log(err.response.data.errorMessage);
+        }
+    }
+
+    auth.loginUser = async function (userData, store) {
+        try{
+            const response = await api.loginUser(userData);
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.LOGIN_USER,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                history.push("/");
+                store.loadIdNamePairs();
+            }
+        }
+        catch (err) {
+            authReducer({
+                type: AuthActionType.ERROR_MESSAGE,
+                payload: {
+                    errMsg: err.response.data.errorMessage
+                }
+            })
+            console.log(err.response.data.errorMessage);
+        }
+
+    }
+    auth.logoutUser = async function (userData, store) {
+        const response = await api.logoutUser(userData);
         if (response.status === 200) {
             authReducer({
-                type: AuthActionType.REGISTER_USER,
+                type: AuthActionType.LOGOUT_USER,
                 payload: {
                     user: response.data.user
                 }
@@ -76,18 +149,13 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.loginUser = async function(userData, store) {
-        const response = await api.loginUser(userData);
-        if (response.status === 200) {
-            authReducer({
-                type: AuthActionType.LOGIN_USER,
-                payload: {
-                    user: response.data.user
-                }
-            })
-            history.push("/");
-            store.loadIdNamePairs();
-        }
+    auth.closeAccountErrorModal = async function () {
+        authReducer({
+            type: AuthActionType.CLOSE_ACCOUNT_ERROR_MODAL,
+            payload: {
+                errMsg: auth.errMsg
+            }
+        })
     }
 
     return (

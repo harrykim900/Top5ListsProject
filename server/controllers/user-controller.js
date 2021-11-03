@@ -24,6 +24,15 @@ registerUser = async (req, res) => {
                 .status(400)
                 .json({ errorMessage: "Please enter all required fields." });
         }
+        const existingUser = await User.findOne({ email: email });
+        if (existingUser) {
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    errorMessage: "An account with this email address already exists."
+                })
+        }
         if (password.length < 8) {
             return res
                 .status(400)
@@ -38,16 +47,7 @@ registerUser = async (req, res) => {
                     errorMessage: "Please enter the same password twice."
                 })
         }
-        const existingUser = await User.findOne({ email: email });
-        if (existingUser) {
-            console.log("Exists");
-            return res
-                .status(400)
-                .json({
-                    success: false,
-                    errorMessage: "An account with this email address already exists."
-                })
-        }
+
 
         const saltRounds = 10;
         const salt = await bcrypt.genSalt(saltRounds);
@@ -90,7 +90,6 @@ loginUser = async (req, res) => {
 
         const existingUser = await User.findOne({ email: email });
         if (!existingUser) {
-            console.log("Exists");
             return res
                 .status(400)
                 .json({
@@ -106,11 +105,9 @@ loginUser = async (req, res) => {
             return res
                 .status(400)
                 .json({
-                    errorMessage: "Password does not match with email."
+                    errorMessage: "Incorrect password."
                 });
         }
-
-
 
         // LOGIN THE USER
         const token = auth.signToken(existingUser);
@@ -132,9 +129,63 @@ loginUser = async (req, res) => {
         res.status(500).send();
     }
 }
+logoutUser = async (req, res) => {
+    try {
+        console.log("Logout");
+        // const { email, password } = req.body;
+        // if (!email || !password) {
+        //     return res
+        //         .status(400)
+        //         .json({ errorMessage: "Please enter all required fields." });
+        // }
+
+        // const existingUser = await User.findOne({ email: email });
+        // if (!existingUser) {
+        //     console.log("Exists");
+        //     return res
+        //         .status(400)
+        //         .json({
+        //             success: false,
+        //             errorMessage: "An account with this email address does not exist."
+        //         })
+        // }
+        // // const saltRounds = 10;
+        // // const salt = await bcrypt.genSalt(saltRounds);
+        // // const passwordHash = await bcrypt.hash(password, salt);
+        // const match = await bcrypt.compare(password, existingUser.passwordHash);
+        // if (!match) {
+        //     return res
+        //         .status(400)
+        //         .json({
+        //             errorMessage: "Password does not match with email."
+        //         });
+        // }
+
+        // // LOGIN THE USER
+        // const token = auth.signToken(existingUser);
+
+        // await res.cookie("token", token, {
+        //     httpOnly: true,
+        //     secure: true,
+        //     sameSite: "none"
+        // }).status(200).json({
+        //     success: true,
+        //     user: {
+        //         firstName: existingUser.firstName,
+        //         lastName: existingUser.lastName,
+        //         email: existingUser.email
+        //     }
+        // }).send();
+    } catch (err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
 
 module.exports = {
     getLoggedIn,
     registerUser,
-    loginUser
+    loginUser,
+    logoutUser
+
 }

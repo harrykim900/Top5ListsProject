@@ -15,6 +15,7 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { GlobalStoreContext } from '../store'
+import AccountErrorModal from './AccountErrorModal'
 
 export default function LoginScreen() {
     const { auth } = useContext(AuthContext);
@@ -112,6 +113,7 @@ export default function LoginScreen() {
                     </Box>
                 </Box>
             </Grid>
+            <AccountErrorModal/>
         </Grid>
 
     );
