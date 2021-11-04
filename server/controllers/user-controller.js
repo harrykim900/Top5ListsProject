@@ -132,50 +132,24 @@ loginUser = async (req, res) => {
 logoutUser = async (req, res) => {
     try {
         console.log("Logout");
-        // const { email, password } = req.body;
-        // if (!email || !password) {
-        //     return res
-        //         .status(400)
-        //         .json({ errorMessage: "Please enter all required fields." });
-        // }
-
+        // const { email } = req.body;
         // const existingUser = await User.findOne({ email: email });
-        // if (!existingUser) {
-        //     console.log("Exists");
-        //     return res
-        //         .status(400)
-        //         .json({
-        //             success: false,
-        //             errorMessage: "An account with this email address does not exist."
-        //         })
-        // }
-        // // const saltRounds = 10;
-        // // const salt = await bcrypt.genSalt(saltRounds);
-        // // const passwordHash = await bcrypt.hash(password, salt);
-        // const match = await bcrypt.compare(password, existingUser.passwordHash);
-        // if (!match) {
-        //     return res
-        //         .status(400)
-        //         .json({
-        //             errorMessage: "Password does not match with email."
-        //         });
-        // }
-
-        // // LOGIN THE USER
+        // console.log(existingUser);
         // const token = auth.signToken(existingUser);
 
         // await res.cookie("token", token, {
         //     httpOnly: true,
         //     secure: true,
         //     sameSite: "none"
-        // }).status(200).json({
-        //     success: true,
-        //     user: {
-        //         firstName: existingUser.firstName,
-        //         lastName: existingUser.lastName,
-        //         email: existingUser.email
-        //     }
-        // }).send();
+        await res.cookie("token", "", {maxAge: 1}).status(200).json({
+            success: true,
+            user: {
+                firstName: null,
+                lastName: null,
+                email: null
+            }
+        }).send();
+
     } catch (err) {
         console.error(err);
         res.status(500).send();

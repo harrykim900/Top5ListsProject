@@ -51,8 +51,8 @@ function AuthContextProvider(props) {
             }
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
-                    user: null,
-                    loggedIn: false
+                    user: payload.user,
+                    loggedIn: payload.loggedIn
                 })
             }
             case AuthActionType.ERROR_MESSAGE: {
@@ -136,16 +136,18 @@ function AuthContextProvider(props) {
 
     }
     auth.logoutUser = async function (userData, store) {
-        const response = await api.logoutUser(userData);
+        console.log(auth.user); //WORK ON THIS
+        const response = await api.logoutUser({email: auth.user.email});
         if (response.status === 200) {
             authReducer({
                 type: AuthActionType.LOGOUT_USER,
                 payload: {
-                    user: response.data.user
+                    user: null,
+                    loggedIn: false
                 }
             })
             history.push("/");
-            store.loadIdNamePairs();
+
         }
     }
 
