@@ -132,15 +132,6 @@ loginUser = async (req, res) => {
 logoutUser = async (req, res) => {
     try {
         console.log("Logout");
-        // const { email } = req.body;
-        // const existingUser = await User.findOne({ email: email });
-        // console.log(existingUser);
-        // const token = auth.signToken(existingUser);
-
-        // await res.cookie("token", token, {
-        //     httpOnly: true,
-        //     secure: true,
-        //     sameSite: "none"
         await res.cookie("token", "", {maxAge: 1}).status(200).json({
             success: true,
             user: {

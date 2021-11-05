@@ -136,8 +136,7 @@ function AuthContextProvider(props) {
 
     }
     auth.logoutUser = async function (userData, store) {
-        console.log(auth.user); //WORK ON THIS
-        const response = await api.logoutUser({email: auth.user.email});
+        const response = await api.logoutUser();
         if (response.status === 200) {
             authReducer({
                 type: AuthActionType.LOGOUT_USER,
