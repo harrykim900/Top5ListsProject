@@ -15,6 +15,7 @@ function Top5Item(props) {
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
     const [draggedTo, setDraggedTo] = useState(0);
+    const [text, setText] = useState("");
 
     function handleDragStart(event, targetId) {
         event.dataTransfer.setData("item", targetId);
@@ -47,6 +48,36 @@ function Top5Item(props) {
         // UPDATE THE LIST
         store.addMoveItemTransaction(sourceId, targetId);
     }
+    // EDITING AN ITEM
+    function handleToggleEdit(event) {
+        event.stopPropagation();
+        setText(props.text);
+        toggleEdit();
+    }
+
+    function toggleEdit() {
+        let newActive = !editActive;
+        if (newActive) {
+            store.setIsItemEditActive();
+        }
+        setEditActive(newActive);
+    }
+
+    function handleKeyPress(event) {
+        if (event.code === "Enter") {
+            store.addUpdateItemTransaction(props.index, text); 
+            toggleEdit();
+        }
+    }
+
+    function handleUpdateText(event) {
+        if (event.target.value == "") {
+            setText(" ");
+        }
+        else {
+            setText(event.target.value);
+        }
+    }
 
     let { index } = props;
 
@@ -55,6 +86,23 @@ function Top5Item(props) {
         itemClass = "top5-item-dragged-to";
     }
 
+    let itemStatus = false;
+    let draggableStatus = true;
+    if (store.isItemEditActive) {
+        itemStatus = true;
+        draggableStatus = false;
+    }
+
+    if (editActive) {
+        return (
+            <input
+                id={'item-' + (index + 1)}
+                className={itemClass}
+                onKeyPress={handleKeyPress}
+                onChange={handleUpdateText}
+                defaultValue={props.text}
+            />)
+    }
     return (
             <ListItem
                 id={'item-' + (index+1)}
@@ -75,7 +123,7 @@ function Top5Item(props) {
                 onDrop={(event) => {
                     handleDrop(event, (index+1))
                 }}
-                draggable="true"
+                draggable={draggableStatus}
                 sx={{ display: 'flex', p: 1 }}
                 style={{
                     fontSize: '48pt',
@@ -83,7 +131,9 @@ function Top5Item(props) {
                 }}
             >
             <Box sx={{ p: 1 }}>
-                <IconButton aria-label='edit'>
+                <IconButton onClick={(event) => {
+                    handleToggleEdit(event)
+                }} aria-label='edit'>
                     <EditIcon style={{fontSize:'48pt'}}  />
                 </IconButton>
             </Box>
