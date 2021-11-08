@@ -109,6 +109,7 @@ getTop5Lists = async (req, res) => {
     }).catch(err => console.log(err))
 }
 getTop5ListPairs = async (req, res) => {
+    const currentEmail = req.query.email;
     await Top5List.find({ }, (err, top5Lists) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
@@ -128,7 +129,9 @@ getTop5ListPairs = async (req, res) => {
                     _id: list._id,
                     name: list.name
                 };
-                pairs.push(pair);
+                if (top5Lists[key].ownerEmail == currentEmail){
+                    pairs.push(pair);
+                }
             }
             return res.status(200).json({ success: true, idNamePairs: pairs })
         }
