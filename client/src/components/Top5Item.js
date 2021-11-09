@@ -137,7 +137,7 @@ function Top5Item(props) {
             draggable={draggableStatus}
             sx={{ display: 'flex', p: 1 }}
             style={{
-                fontSize: '48pt',
+                fontSize: '36pt',
                 width: '100%'
             }}
         >
@@ -145,7 +145,7 @@ function Top5Item(props) {
                 <IconButton onClick={(event) => {
                     handleToggleEdit(event)
                 }} aria-label='edit'>
-                    <EditIcon style={{ fontSize: '48pt' }} />
+                    <EditIcon style={{ fontSize: '36pt' }} />
                 </IconButton>
             </Box>
             <Box sx={{ p: 1, flexGrow: 1 }}>{props.text}</Box>

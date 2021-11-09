@@ -23,7 +23,11 @@ const HomeScreen = () => {
         store.createNewList();
     }
     let listCard = "";
-    // console.log(auth.user);
+
+    let editStatus = false;
+    if (store.isListNameEditActive){
+        editStatus = true;
+    }
     if (store) {
         listCard = 
             <List sx={{ width: '90%', left: '5%', bgcolor: 'background.paper' }}>
@@ -47,6 +51,7 @@ const HomeScreen = () => {
                 id="add-list-button"
                 size="small"
                 onClick={handleCreateNewList}
+                disabled={editStatus}
             >
                 <AddIcon />
             </Fab>
