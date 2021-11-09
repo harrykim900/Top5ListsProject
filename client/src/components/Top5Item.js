@@ -19,6 +19,7 @@ function Top5Item(props) {
 
     function handleDragStart(event, targetId) {
         event.dataTransfer.setData("item", targetId);
+        // console.log(targetId);
     }
 
     function handleDragOver(event) {
@@ -137,6 +138,7 @@ function Top5Item(props) {
                 handleDrop(event, (index + 1))
             }}
             draggable={draggableStatus}
+            disabled={itemStatus}
             sx={{ display: 'flex', p: 1 }}
             style={{
                 fontSize: '36pt',

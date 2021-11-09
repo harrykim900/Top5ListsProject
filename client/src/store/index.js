@@ -314,21 +314,30 @@ function GlobalStoreContextProvider(props) {
 
     store.moveItem = function (start, end) {
         start -= 1;
+        // console.log(start);
         end -= 1;
-        if (start < end) {
-            let temp = store.currentList.items[start];
-            for (let i = start; i < end; i++) {
-                store.currentList.items[i] = store.currentList.items[i + 1];
-            }
-            store.currentList.items[end] = temp;
-        }
-        else if (start > end) {
-            let temp = store.currentList.items[start];
-            for (let i = start; i > end; i--) {
-                store.currentList.items[i] = store.currentList.items[i - 1];
-            }
-            store.currentList.items[end] = temp;
-        }
+        // console.log(end);
+        // if (start < end) {
+        //     let temp = store.currentList.items[start];
+        //     for (let i = start; i < end; i++) {
+        //         store.currentList.items[i] = store.currentList.items[i + 1];
+        //     }
+        //     store.currentList.items[end] = temp;
+        // }
+        // else if (start > end) {
+        //     let temp = store.currentList.items[start];
+        //     for (let i = start; i > end; i--) {
+        //         store.currentList.items[i] = store.currentList.items[i - 1];
+        //     }
+        //     store.currentList.items[end] = temp;
+        // }
+        let startItem = store.currentList.items[start];
+        // console.log(startItem);
+        let targetItem = store.currentList.items[end];
+        // console.log(targetItem);
+
+        store.currentList.items[start] = targetItem;
+        store.currentList.items[end] = startItem;
 
         // NOW MAKE IT OFFICIAL
         store.updateCurrentList();

@@ -31,7 +31,7 @@ export default function LoginScreen() {
     };
 
     return (
-        <Grid container component="main" sx={{ height: '100vh' }}>
+        <Grid container component="main" sx={{ height: '80vh' }}>
             <CssBaseline />
             <Grid
                 item
@@ -45,7 +45,7 @@ export default function LoginScreen() {
                         t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    height: '80%'
+                    height: '100%'
                 }}
             />
             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>

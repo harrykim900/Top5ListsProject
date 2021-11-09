@@ -29,6 +29,7 @@ function ListCard(props) {
 
     function handleToggleEdit(event) {
         event.stopPropagation();
+        setText(idNamePair.name);
         toggleEdit();
     }
 
@@ -48,12 +49,17 @@ function ListCard(props) {
     function handleKeyPress(event) {
         if (event.code === "Enter") {
             let id = event.target.id.substring("list-".length);
+            console.log("KEy press");
             store.changeListName(id, text);
             toggleEdit();
         }
     }
     function handleUpdateText(event) {
         setText(event.target.value);
+    }
+    let cardStatus = false;
+    if (store.isListNameEditActive){
+        cardStatus = true;
     }
 
     let cardElement =
@@ -66,6 +72,7 @@ function ListCard(props) {
                 handleLoadList(event, idNamePair._id)
             }
             }
+            disabled={cardStatus}
             style={{
                 fontSize: '36pt',
                 width: '100%'
