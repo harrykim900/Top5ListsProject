@@ -10,6 +10,7 @@ export const AuthActionType = {
     GET_LOGGED_IN: "GET_LOGGED_IN",
     REGISTER_USER: "REGISTER_USER",
     LOGIN_USER: "LOGIN_USER",
+    LOGIN_GUEST: "LOGIN_GUEST",
     LOGOUT_USER: "LOGOUT_USER",
     ERROR_MESSAGE: "ERROR_MESSAGE",
     CLOSE_ACCOUNT_ERROR_MODAL: "CLOSE_ACCOUNT_ERROR_MODAL",
@@ -21,6 +22,7 @@ function AuthContextProvider(props) {
         loggedIn: false,
         errorOccurred: false,
         errMsg: "",
+        guestLoggedIn: false
     });
     const history = useHistory();
 
@@ -34,7 +36,8 @@ function AuthContextProvider(props) {
             case AuthActionType.GET_LOGGED_IN: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: payload.loggedIn
+                    loggedIn: payload.loggedIn,
+                    guestLoggedIn: payload.guestLoggedIn
                 });
             }
             case AuthActionType.REGISTER_USER: {
@@ -49,10 +52,18 @@ function AuthContextProvider(props) {
                     loggedIn: true
                 })
             }
+            case AuthActionType.LOGIN_GUEST: {
+                return setAuth({
+                    user: payload.user,
+                    loggedIn: true,
+                    guestLoggedIn: true
+                })
+            }
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: payload.loggedIn
+                    loggedIn: payload.loggedIn,
+                    guestLoggedIn: false
                 })
             }
             case AuthActionType.ERROR_MESSAGE: {
@@ -75,13 +86,26 @@ function AuthContextProvider(props) {
     auth.getLoggedIn = async function () {
         const response = await api.getLoggedIn();
         if (response.status === 200) {
-            authReducer({
-                type: AuthActionType.GET_LOGGED_IN,
-                payload: {
-                    loggedIn: response.data.loggedIn,
-                    user: response.data.user
-                }
-            });
+            if (response.data.user.username == "Guest"){
+                authReducer({
+                    type: AuthActionType.GET_LOGGED_IN,
+                    payload: {
+                        loggedIn: response.data.loggedIn,
+                        user: response.data.user,
+                        guestLoggedIn: true
+                    }
+                });
+            }
+            else{
+                authReducer({
+                    type: AuthActionType.GET_LOGGED_IN,
+                    payload: {
+                        loggedIn: response.data.loggedIn,
+                        user: response.data.user
+                    }
+                });
+            }
+
         }
     }
 
@@ -111,7 +135,7 @@ function AuthContextProvider(props) {
     }
 
     auth.loginUser = async function (userData, store) {
-        try{
+        try {
             const response = await api.loginUser(userData);
             if (response.status === 200) {
                 authReducer({
@@ -133,6 +157,21 @@ function AuthContextProvider(props) {
             })
             console.log(err.response.data.errorMessage);
         }
+
+    }
+    auth.loginGuest = async function (userData, store) {
+        const response = await api.loginGuest();
+        if (response.status === 200) {
+            authReducer({
+                type: AuthActionType.LOGIN_GUEST,
+                payload: {
+                    user: response.data.user
+                }
+            })
+            history.push("/");
+            store.loadIdNamePairs();
+        }
+
 
     }
     auth.logoutUser = async function (userData, store) {

@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import PersonIcon from '@mui/icons-material/Person';
 
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
@@ -54,8 +56,6 @@ export default function AppBanner() {
             <Link to='/register/'>
                 <MenuItem onClick={handleMenuClose}>Create New Account</MenuItem>
             </Link>
-            {/* <MenuItem onClick={handleMenuClose}><Link to='/login/'>Login</Link></MenuItem>
-            <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem> */}
         </Menu>
     );
     const loggedInMenu = 
@@ -91,12 +91,12 @@ export default function AppBanner() {
         if (loggedIn){
             return auth.user.firstName[0] + auth.user.lastName[0];
         }
-        return <AccountCircle />;
+        return <PersonIcon style={{color:'black'}} />;
     }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
+            <AppBar position="static" style={{background:'#E0E0E0'}}>
                 <Toolbar>
                     <Typography                        
                         variant="h4"
@@ -104,20 +104,20 @@ export default function AppBanner() {
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block' } }}                        
                     >
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>T<sup>5</sup>L</Link>
+                        <Link style={{ textDecoration: 'none', color: '#D4B03A' }} to='/'>T<sup>5</sup>L</Link>
                     </Typography>
-                    <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
+                    <Box sx={{ flexGrow: 1 }}></Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
-                            size="large"
+                            size="medium"
                             edge="end"
                             aria-label="account of current user"
                             aria-controls={menuId}
                             aria-haspopup="true"
                             onClick={handleProfileMenuOpen}
-                            color="inherit"
+                            style={{color: 'black', borderStyle: 'solid', borderWidth: '2pt'}}
                         >
-                            { getAccountMenu(auth.loggedIn) }
+                            { getAccountMenu(auth.loggedIn && !auth.guestLoggedIn) }
                         </IconButton>
                     </Box>
                 </Toolbar>

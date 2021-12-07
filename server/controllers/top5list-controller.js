@@ -125,9 +125,11 @@ getTop5ListPairs = async (req, res) => {
             let pairs = [];
             for (let key in top5Lists) {
                 let list = top5Lists[key];
+                console.log(list);
                 let pair = {
                     _id: list._id,
-                    name: list.name
+                    name: list.name,
+                    username: list.ownerUsername
                 };
                 if (top5Lists[key].ownerEmail == currentEmail){
                     pairs.push(pair);

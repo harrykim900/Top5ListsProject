@@ -6,6 +6,11 @@ import ListItem from '@mui/material/ListItem';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
+import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -49,7 +54,6 @@ function ListCard(props) {
     function handleKeyPress(event) {
         if (event.code === "Enter") {
             let id = event.target.id.substring("list-".length);
-            console.log("KEy press");
             store.changeListName(id, text);
             toggleEdit();
         }
@@ -57,40 +61,88 @@ function ListCard(props) {
     function handleUpdateText(event) {
         setText(event.target.value);
     }
-    let cardStatus = false;
-    if (store.isListNameEditActive){
-        cardStatus = true;
+
+    function handleLike(event) {
+        event.stopPropagation();
     }
 
+    function handleDislike(event) {
+        event.stopPropagation();
+    }
+
+    function handleExpand(event) {
+        event.stopPropagation();
+    }
+    let cardStatus = false;
+    if (store.isListNameEditActive) {
+        cardStatus = true;
+    }
+    console.log(idNamePair);
     let cardElement =
         <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
-            sx={{ marginTop: '15px', display: 'flex', p: 1 }}
+            sx={{ marginTop: '15px', display: 'flex', p: 1, flexDirection: 'row' }}
             button
-            onClick={(event) => {
-                handleLoadList(event, idNamePair._id)
-            }
-            }
+            // onClick={(event) => {
+            //     handleLoadList(event, idNamePair._id)
+            // }
+            // }
             disabled={cardStatus}
             style={{
-                fontSize: '36pt',
-                width: '100%'
+                fontSize: '16pt',
+                width: '100%',
+                backgroundColor: '#D4D4F5',
+                borderRadius: '10pt',
+                borderWidth: '2px',
+                borderStyle: 'solid',
+                borderColor: 'black'
             }}
+
         >
-                <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
-                <Box sx={{ p: 1 }}>
+            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}
+                <Box sx={{ p: 0.5 }} style={{ fontSize: '10pt' }}>By: {idNamePair.username}</Box>
+                <Box sx={{ p: 0.5 }} style={{ fontSize: '10pt' }}>Published: </Box>
+                <Box sx={{ p: 0.5 }} style={{ fontSize: '12pt', color: 'red' }}            
+                onClick={(event) => {
+                handleLoadList(event, idNamePair._id)}
+            }> Edit </Box>
+            </Box>
+            {/* <Box sx={{ p: 1 }}>
                     <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                        <EditIcon style={{fontSize:'36pt'}} />
+                        <EditIcon style={{fontSize:'18pt'}} />
+                    </IconButton>
+                </Box> */}
+            <Box sx={{ p: 1 }}>
+                <Box sx={{ p: 1 }}>
+                    <IconButton onClick={handleLike}>
+                        <ThumbUpAltOutlinedIcon />
                     </IconButton>
                 </Box>
                 <Box sx={{ p: 1 }}>
-                    <IconButton onClick={(event) => {
-                        handleDeleteList(event, idNamePair._id)
-                    }} aria-label='delete'>
-                        <DeleteIcon style={{fontSize:'36pt'}} />
+                    <IconButton onClick={handleDislike}>
+                        <ThumbDownAltOutlinedIcon />
                     </IconButton>
                 </Box>
+                <Box sx={{ p: 1, fontSize: '10pt' }}>
+                    Views:
+                </Box>
+
+            </Box>
+
+            <Box sx={{ p: 1 }}>
+                <IconButton onClick={(event) => {
+                    handleDeleteList(event, idNamePair._id)
+                }} aria-label='delete'>
+                    <DeleteIcon style={{ fontSize: '18pt' }} />
+                </IconButton>
+                <IconButton onClick={handleExpand}>
+                    <ExpandMoreIcon></ExpandMoreIcon>
+                </IconButton>
+            </Box>
+
+
+
         </ListItem>
 
     if (editActive) {
@@ -107,8 +159,8 @@ function ListCard(props) {
                 onKeyPress={handleKeyPress}
                 onChange={handleUpdateText}
                 defaultValue={idNamePair.name}
-                inputProps={{style: {fontSize: 36}}}
-                InputLabelProps={{style: {fontSize: 16}}}
+                inputProps={{ style: { fontSize: 18 } }}
+                InputLabelProps={{ style: { fontSize: 16 } }}
                 autoFocus
             />
     }

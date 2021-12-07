@@ -19,9 +19,9 @@ const HomeScreen = () => {
         store.loadIdNamePairs();
     }, []);
 
-    function handleCreateNewList() {
-        store.createNewList();
-    }
+    // function handleCreateNewList() {
+    //     store.createNewList();
+    // }
     let listCard = "";
 
     let editStatus = false;
@@ -30,7 +30,7 @@ const HomeScreen = () => {
     }
     if (store) {
         listCard = 
-            <List sx={{ width: '90%', left: '5%', bgcolor: 'background.paper' }}>
+            <List sx={{ width: '90%', left: '5%', bgcolor: '#E6E6E6', borderRadius: '30pt' }}>
             {
                 store.idNamePairs.map((pair) => (
                     <ListCard
@@ -44,19 +44,6 @@ const HomeScreen = () => {
     }
     return (
         <div id="top5-list-selector">
-            <div id="list-selector-heading">
-            <Fab 
-                color="primary" 
-                aria-label="add"
-                id="add-list-button"
-                size="small"
-                onClick={handleCreateNewList}
-                disabled={editStatus}
-            >
-                <AddIcon />
-            </Fab>
-                <Typography variant="h2" fontSize="36pt">Your Lists</Typography>
-            </div>
             <div id="list-selector-list">
                 {
                     listCard

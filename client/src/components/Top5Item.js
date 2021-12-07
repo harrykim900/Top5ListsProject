@@ -122,27 +122,31 @@ function Top5Item(props) {
             key={props.key}
             sx={{ marginTop: '15px', display: 'flex', p: 1 }}
             className={itemClass}
-            onDragStart={(event) => {
-                handleDragStart(event, (index + 1))
-            }}
-            onDragOver={(event) => {
-                handleDragOver(event, (index + 1))
-            }}
-            onDragEnter={(event) => {
-                handleDragEnter(event, (index + 1))
-            }}
-            onDragLeave={(event) => {
-                handleDragLeave(event, (index + 1))
-            }}
-            onDrop={(event) => {
-                handleDrop(event, (index + 1))
-            }}
-            draggable={draggableStatus}
+            // onDragStart={(event) => {
+            //     handleDragStart(event, (index + 1))
+            // }}
+            // onDragOver={(event) => {
+            //     handleDragOver(event, (index + 1))
+            // }}
+            // onDragEnter={(event) => {
+            //     handleDragEnter(event, (index + 1))
+            // }}
+            // onDragLeave={(event) => {
+            //     handleDragLeave(event, (index + 1))
+            // }}
+            // onDrop={(event) => {
+            //     handleDrop(event, (index + 1))
+            // }}
+            // draggable={draggableStatus}
             disabled={itemStatus}
             sx={{ display: 'flex', p: 1 }}
             style={{
-                fontSize: '36pt',
-                width: '100%'
+                fontSize: '32pt',
+                width: '100%',
+                borderRadius: '10pt',
+                borderWidth: '2px',
+                borderStyle: 'solid',
+                borderColor: 'black',
             }}
         >
             <Box sx={{ p: 1 }}>
